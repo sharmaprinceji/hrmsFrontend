@@ -1,0 +1,58 @@
+/* Layout */
+.leave-form-container {
+  display: flex;
+}
+
+/* Main */
+.leave-form-main {
+  flex: 1;
+  padding: 30px;
+  background: #f1f5f9;
+}
+
+/* Card */
+.leave-form-card {
+  max-width: 450px;
+  margin: auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Title */
+.leave-form-title {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  color: #1e293b;
+}
+
+/* Inputs */
+.leave-form-input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  outline: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.leave-form-input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 5px rgba(79,70,229,0.3);
+}
+
+/* Button spacing */
+.leave-form-btn {
+  margin-top: 10px;
+}
+
+/* Hover animation */
+.leave-form-card:hover {
+  transform: translateY(-2px);
+  transition: 0.3s;
+}

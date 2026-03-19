@@ -1,0 +1,77 @@
+.employee-container {
+  display: flex;
+}
+
+/* Main Content */
+.employee-main {
+  padding: 20px;
+  width: 100%;
+}
+
+/* Table Card */
+.employee-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* Table */
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Header */
+.employee-table thead {
+  background: #f1f5f9;
+}
+
+.employee-table th {
+  text-align: left;
+  padding: 12px;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Rows */
+.employee-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Hover */
+.employee-table tbody tr:hover {
+  background: #f8fafc;
+  transition: 0.2s;
+}
+
+/* Action Buttons */
+.action-btn {
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/* Edit */
+.edit-btn {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: #2563eb;
+}
+
+/* Delete */
+.delete-btn {
+  background: #ef4444;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}

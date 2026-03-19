@@ -1,0 +1,110 @@
+.department-container {
+  display: flex;
+}
+
+.department-main {
+  flex: 1;
+  padding: 30px;
+  background: #f1f5f9;
+}
+
+/* Title */
+.department-main h2 {
+  margin-bottom: 20px;
+}
+
+/* Form */
+.department-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.department-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  width: 200px;
+}
+
+.department-form button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Create / Update */
+.department-form button[type="submit"] {
+  background: #3b82f6;
+  color: white;
+}
+
+.department-form button[type="submit"]:hover {
+  background: #2563eb;
+}
+
+/* Cancel */
+.cancel-btn {
+  background: #9ca3af;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background: #6b7280;
+}
+
+/* Table */
+.department-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.department-table th,
+.department-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.department-table th {
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+/* Hover */
+.department-table tr:hover {
+  background: #f9fafb;
+}
+
+/* Buttons */
+.edit-btn {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin-right: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}

@@ -1,0 +1,13 @@
+.loader {
+  border: 5px solid #eee;
+  border-top: 5px solid var(--primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,67 @@
+.leave-container {
+  display: flex;
+}
+
+.leave-main {
+  padding: 20px;
+  width: 100%;
+}
+
+/* Card */
+.leave-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* Table */
+.leave-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leave-table th {
+  text-align: left;
+  padding: 12px;
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.leave-table td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Hover */
+.leave-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Status badge */
+.status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.approved {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status.pending {
+  background: #fef9c3;
+  color: #ca8a04;
+}
+
+.status.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Buttons */
+.leave-btn {
+  margin-right: 5px;
+}

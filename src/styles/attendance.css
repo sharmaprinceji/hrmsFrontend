@@ -1,0 +1,94 @@
+.attendance-container {
+  display: flex;
+}
+
+.attendance-main {
+  flex: 1;
+  padding: 30px;
+  background: #f1f5f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.attendance-card {
+  background: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  width: 350px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.attendance-card h2 {
+  margin-bottom: 15px;
+}
+
+/* Status */
+.status {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.status.not_checked_in {
+  color: #ef4444;
+}
+
+.status.checked_in {
+  color: #3b82f6;
+}
+
+.status.checked_out {
+  color: #16a34a;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Check-in */
+.checkin {
+  background: #3b82f6;
+  color: white;
+}
+
+.checkin:hover {
+  background: #2563eb;
+}
+
+/* Check-out */
+.checkout {
+  background: #16a34a;
+  color: white;
+}
+
+.checkout:hover {
+  background: #15803d;
+}
+
+.present {
+  background: #16a34a;
+  color: #fff;
+}
+
+.absent {
+  background: #dc2626;
+  color: #fff;
+}

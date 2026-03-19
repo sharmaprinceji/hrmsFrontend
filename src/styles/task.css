@@ -1,0 +1,74 @@
+.task-container {
+  display: flex;
+}
+
+.task-main {
+  padding: 20px;
+  width: 100%;
+  background: #f1f5f9;
+}
+
+/* Board */
+.task-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Column */
+.task-column {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  min-height: 400px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Title */
+.column-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Card */
+.task-card {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: 0.2s;
+}
+
+.task-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Buttons */
+.task-btn {
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.start-btn {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.done-btn {
+  background: #16a34a;
+  color: #fff;
+}
+
+/* dragging effect */
+.task-card.dragging {
+  background: #e0f2fe;
+}
+
+/* column highlight */
+.task-column.drag-over {
+  background: #eef2ff;
+}
