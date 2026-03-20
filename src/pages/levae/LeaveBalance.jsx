@@ -39,6 +39,11 @@ const LeaveBalance = () => {
         <div className="balance-grid">
           {balances.map((b) => (
             <Card key={b.id} className="balance-card">
+              
+              {/* ✅ Employee Name */}
+              <h4 className="employee-name">{b.employee_name}</h4>
+
+              {/* Leave Type */}
               <h3>{b.leave_type}</h3>
 
               <p>Total: {b.total_leaves}</p>
@@ -53,6 +58,7 @@ const LeaveBalance = () => {
               >
                 Remaining: {b.remaining_leaves}
               </p>
+
             </Card>
           ))}
         </div>
