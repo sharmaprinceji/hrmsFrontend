@@ -9,6 +9,7 @@ import "../../styles/payrolls.css";
 const PayrollList = () => {
   const { user } = useContext(AuthContext);
 
+  const [payrolls, setPayrolls] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPayroll, setSelectedPayroll] = useState(null);
@@ -22,21 +23,32 @@ const PayrollList = () => {
 
   const isHRorAdmin = user?.roleId === 1 || user?.roleId === 3;
 
-  // ✅ FETCH EMPLOYEES ONLY
-  const fetchEmployees = async () => {
+  // ✅ FETCH BOTH APIs
+  const fetchData = async () => {
     try {
-      const res = await api.get("/employees");
-      setEmployees(res.data.data || []);
+      const [payrollRes, empRes] = await Promise.all([
+        api.get("/payroll/view"),
+        api.get("/employees"),
+      ]);
+
+      setPayrolls(payrollRes.data.data || []);
+      setEmployees(empRes.data.data || []);
     } catch {
-      alert("Error loading employees");
+      alert("Error loading data");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchEmployees();
+    fetchData();
   }, []);
+
+  // ✅ CREATE EMPLOYEE MAP (FAST LOOKUP)
+  const employeeMap = {};
+  employees.forEach((emp) => {
+    employeeMap[emp.id] = emp;
+  });
 
   // ✅ GENERATE PAYROLL
   const generatePayroll = async (e) => {
@@ -51,22 +63,41 @@ const PayrollList = () => {
       });
 
       alert("Payroll generated successfully");
+      fetchData(); // refresh table
     } catch (err) {
       alert(err?.response?.data?.message || "Generate failed");
     }
   };
 
-  // ✅ DOWNLOAD PAYSLIP
-  const downloadPayslip = async (employeeId) => {
+  // ✅ VIEW PAYROLL DETAILS
+  const viewPayroll = async (id) => {
     try {
-      const res = await api.get(`/payroll/payslip/${employeeId}`, {
+      const res = await api.get(`/payroll/employee/${id}`);
+      const payroll = res.data.data;
+
+      const emp = employeeMap[payroll.employee_id] || {};
+
+      // 🔥 merge payroll + employee
+      setSelectedPayroll({
+        ...payroll,
+        ...emp,
+      });
+    } catch {
+      alert("Failed to load payroll details");
+    }
+  };
+
+  // ✅ DOWNLOAD PAYSLIP
+  const downloadPayslip = async (id) => {
+    try {
+      const res = await api.get(`/payroll/payslip/${id}`, {
         responseType: "blob",
       });
 
       const url = window.URL.createObjectURL(new Blob([res.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `payslip-${employeeId}.pdf`);
+      link.setAttribute("download", `payslip-${id}.pdf`);
       link.click();
     } catch {
       alert("Download failed");
@@ -78,7 +109,7 @@ const PayrollList = () => {
       <Sidebar />
 
       <div className="payroll-main">
-        <h2>Employee Payroll</h2>
+        <h2>Payroll Records</h2>
 
         {/* ✅ GENERATE FORM */}
         {isHRorAdmin && (
@@ -131,9 +162,9 @@ const PayrollList = () => {
         {/* ✅ TABLE */}
         {loading ? (
           <Loader />
-        ) : employees.length === 0 ? (
+        ) : payrolls.length === 0 ? (
           <div className="payroll-card">
-            <p>No employees found</p>
+            <p>No payroll records found</p>
           </div>
         ) : (
           <div className="payroll-card">
@@ -143,45 +174,48 @@ const PayrollList = () => {
                   <th>Name</th>
                   <th>Department</th>
                   <th>Designation</th>
-                  <th>Salary</th>
+                  <th>Base Salary</th>
                   <th>Month</th>
                   <th>Year</th>
+                  <th>Net Salary</th>
                   <th>Actions</th>
                 </tr>
               </thead>
 
               <tbody>
-                {employees.map((emp) => (
-                  <tr key={emp.id}>
-                    <td>{emp.name}</td>
-                    <td>{emp.department || "-"}</td>
-                    <td>{emp.designation || "-"}</td>
-                    <td>₹{emp.salary || "-"}</td>
+                {payrolls.map((p) => {
+                  const emp = employeeMap[p.employee_id] || {};
 
-                    <td>{form.month}</td>
-                    <td>{form.year}</td>
+                  return (
+                    <tr key={p.id}>
+                      <td>{p.name}</td>
 
-                    <td>
-                      <button
-                        onClick={() => setSelectedPayroll(emp)}
-                      >
-                        👁 View
-                      </button>
+                      <td>{emp.department || "-"}</td>
+                      <td>{emp.designation || "-"}</td>
+                      <td>₹{emp.salary || "-"}</td>
 
-                      <button
-                        onClick={() => downloadPayslip(emp.id)}
-                      >
-                        📄 Download
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                      <td>{p.payroll_month}</td>
+                      <td>{p.payroll_year}</td>
+                      <td>₹{p.net_salary}</td>
+
+                      <td>
+                        <button onClick={() => viewPayroll(p.id)}>
+                          👁 View
+                        </button>
+
+                        <button onClick={() => downloadPayslip(p.id)}>
+                          📄 Download
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         )}
 
-        {/* ✅ VIEW DETAILS */}
+        {/* ✅ DETAILS MODAL */}
         {selectedPayroll && (
           <PayrollDetails
             payroll={selectedPayroll}
