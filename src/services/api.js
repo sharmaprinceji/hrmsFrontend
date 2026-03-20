@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: "http://localhost:5001/api",
 });
 
-// ✅ REQUEST: attach access token
+//REQUEST: attach access token
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -13,14 +13,14 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 🔥 RESPONSE: handle token expiry
+//RESPONSE: handle token expiry
 api.interceptors.response.use(
   (response) => response,
 
   async (error) => {
     const originalRequest = error.config;
 
-    // ❌ Don't retry refresh endpoint itself
+    //Don't retry refresh endpoint itself
     if (originalRequest.url.includes("/auth/refresh")) {
       localStorage.clear();
       window.location.href = "/";
