@@ -1,0 +1,45 @@
+.addpayroll-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.addpayroll-main {
+  flex: 1;
+  padding: 30px;
+}
+
+.addpayroll-main h2 {
+  margin-bottom: 20px;
+}
+
+.addpayroll-form {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.addpayroll-form select,
+.addpayroll-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.addpayroll-form button {
+  padding: 10px;
+  border: none;
+  background: #4a90e2;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.addpayroll-form button:hover {
+  background: #357abd;
+}

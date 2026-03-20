@@ -17,6 +17,7 @@ import Department from "../pages/department/Department";
 import UserList from "../pages/users/UserList";
 import UserEdit from "../pages/users/UserEdit";
 import LeaveBalance from "../pages/levae/LeaveBalance";
+import AddPayroll from "../pages/payroll/AddPayroll";
 
 const AppRoutes = () => {
     return (
@@ -123,6 +124,15 @@ const AppRoutes = () => {
                     element={
                         <ProtectedRoute module="payroll" action="view">
                             <PayrollList />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/payroll/add"
+                    element={
+                        <ProtectedRoute>
+                            <AddPayroll />
                         </ProtectedRoute>
                     }
                 />
