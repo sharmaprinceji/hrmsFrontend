@@ -18,6 +18,8 @@ import UserList from "../pages/users/UserList";
 import UserEdit from "../pages/users/UserEdit";
 import LeaveBalance from "../pages/levae/LeaveBalance";
 import AddPayroll from "../pages/payroll/AddPayroll";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 const AppRoutes = () => {
     return (
@@ -26,6 +28,8 @@ const AppRoutes = () => {
 
                 {/* Public */}
                 <Route path="/" element={<Login />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
 
                 {/* Dashboard (everyone logged-in only) */}
                 <Route

@@ -68,3 +68,16 @@
     transform: translateY(0);
   }
 }
+.forgot-link {
+  margin-top: 12px;
+  text-align: center;
+  color: #4a90e2;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+  color: #357abd;
+}
