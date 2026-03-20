@@ -14,7 +14,7 @@ const LeaveApply = () => {
 
   const applyLeave = async () => {
     try {
-      const res = await api.post("/leave/apply", form); // ✅ FIX endpoint
+      const res = await api.post("/leaves/apply", form); // ✅ FIX endpoint
 
       alert(res.data.message || "Leave Applied");
 

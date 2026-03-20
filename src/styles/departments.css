@@ -108,3 +108,25 @@
 .delete-btn:hover {
   background: #dc2626;
 }
+
+/* Header */
+.dept-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Add button */
+.add-btn {
+  background: #3b82f6;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: #2563eb;
+}

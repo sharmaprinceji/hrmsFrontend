@@ -1,105 +1,7 @@
-// import { useEffect, useState } from "react";
-// import api from "../../services/api";
-// import Sidebar from "../../components/common/Sidebar";
-// import "../../styles/task.css";
-
-// const TaskList = () => {
-//   const [tasks, setTasks] = useState([]);
-
-//   const fetchTasks = async () => {
-//     try {
-//       const res = await api.get("/tasks");
-//       setTasks(res.data.data || []);
-//     } catch (err) {
-//       alert("Failed to load tasks");
-//     }
-//   };
-
-//   const updateStatus = async (id, status) => {
-//     try {
-//       await api.put(`/tasks/${id}`, { status });
-//       fetchTasks();
-//     } catch (err) {
-//       alert("Update failed");
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchTasks();
-//   }, []);
-
-//   // Filter by status
-//   const todo = tasks.filter((t) => t.status === "todo");
-//   const inProgress = tasks.filter((t) => t.status === "in_progress");
-//   const completed = tasks.filter((t) => t.status === "completed");
-
-//   return (
-//     <div className="task-container">
-//       <Sidebar />
-
-//       <div className="task-main">
-//         <h2>Task Board</h2>
-
-//         <div className="task-board">
-
-//           {/* TODO */}
-//           <div className="task-column">
-//             <div className="column-title">📝 To Do</div>
-
-//             {todo.map((t) => (
-//               <div key={t.id} className="task-card">
-//                 <div>{t.title}</div>
-
-//                 <button
-//                   className="task-btn start-btn"
-//                   onClick={() => updateStatus(t.id, "in_progress")}
-//                 >
-//                   Start
-//                 </button>
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* IN PROGRESS */}
-//           <div className="task-column">
-//             <div className="column-title">⚡ In Progress</div>
-
-//             {inProgress.map((t) => (
-//               <div key={t.id} className="task-card">
-//                 <div>{t.title}</div>
-
-//                 <button
-//                   className="task-btn done-btn"
-//                   onClick={() => updateStatus(t.id, "completed")}
-//                 >
-//                   Done
-//                 </button>
-//               </div>
-//             ))}
-//           </div>
-
-//           {/* COMPLETED */}
-//           <div className="task-column">
-//             <div className="column-title">✅ Completed</div>
-
-//             {completed.map((t) => (
-//               <div key={t.id} className="task-card">
-//                 <div>{t.title}</div>
-//               </div>
-//             ))}
-//           </div>
-
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default TaskList;
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import Sidebar from "../../components/common/Sidebar";
+import { AuthContext } from "../../context/AuthContext";
 import {
   DragDropContext,
   Droppable,
@@ -108,6 +10,7 @@ import {
 import "../../styles/task.css";
 
 const TaskList = () => {
+  const { user } = useContext(AuthContext);
   const [tasks, setTasks] = useState([]);
 
   const fetchTasks = async () => {
@@ -119,41 +22,43 @@ const TaskList = () => {
     fetchTasks();
   }, []);
 
-  // Group tasks
   const columns = {
     todo: tasks.filter((t) => t.status === "todo"),
     in_progress: tasks.filter((t) => t.status === "in_progress"),
     completed: tasks.filter((t) => t.status === "completed"),
   };
 
-  // Drag End
-const onDragEnd = async (result) => {
-  if (!result.destination) return;
+  const onDragEnd = async (result) => {
+    if (!result.destination) return;
 
-  const taskId = result.draggableId;
-  const newStatus = result.destination.droppableId;
+    const taskId = result.draggableId;
+    const newStatus = result.destination.droppableId;
 
-  const task = tasks.find((t) => String(t.id) === taskId);
+    const task = tasks.find((t) => String(t.id) === taskId);
+    if (!task) return;
 
-  if (!task) return;
+    try {
+      await api.put(`/tasks/${taskId}`, {
+        title: task.title || "",
+        description: task.description || "",
+        priority: task.priority || "low",
+        status: newStatus,
+        dueDate: task.dueDate || null,
+      });
 
-  try {
-    await api.put(`/tasks/${taskId}`, {
-      title: task.title || "",
-      description: task.description || "",
-      priority: task.priority || "low",
-      status: newStatus,
+      // ✅ optimistic update
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === task.id ? { ...t, status: newStatus } : t
+        )
+      );
 
-      // 🔥 FIX HERE
-      dueDate: task.dueDate ? task.dueDate : null,
-    });
-
-    fetchTasks();
-  } catch (err) {
-    console.error(err);
-    alert("Update failed");
-  }
-};
+    } catch (err) {
+      console.error(err);
+      alert("Update failed or not allowed");
+      fetchTasks(); // revert
+    }
+  };
 
   return (
     <div className="task-container">
@@ -196,7 +101,9 @@ const onDragEnd = async (result) => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <div>{task.title}</div>
+                            <strong>{task.title}</strong>
+                            <p>{task.description}</p>
+                            <small>Priority: {task.priority}</small>
                           </div>
                         )}
                       </Draggable>

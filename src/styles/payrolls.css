@@ -1,15 +1,68 @@
+/* Layout */
 .payroll-container {
   display: flex;
 }
 
-/* Main */
 .payroll-main {
-  padding: 20px;
-  width: 100%;
+  flex: 1;
+  padding: 25px;
   background: #f1f5f9;
 }
 
-/* Card */
+/* Title */
+.payroll-main h2 {
+  margin-bottom: 15px;
+  color: #1e293b;
+}
+
+/* ========================= */
+/* 🔥 FORM */
+/* ========================= */
+.payroll-form {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.payroll-form select,
+.payroll-form input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  outline: none;
+}
+
+.payroll-form select:focus,
+.payroll-form input:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 5px rgba(79,70,229,0.3);
+}
+
+.payroll-form button {
+  background: #4f46e5;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.payroll-form button:hover {
+  background: #4338ca;
+}
+
+/* ========================= */
+/* 📦 CARD */
+/* ========================= */
 .payroll-card {
   background: #fff;
   padding: 20px;
@@ -17,16 +70,22 @@
   box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
 
-/* Table */
+/* ========================= */
+/* 📊 TABLE */
+/* ========================= */
 .payroll-table {
   width: 100%;
   border-collapse: collapse;
 }
 
+.payroll-table thead {
+  background: #f1f5f9;
+}
+
 .payroll-table th {
   text-align: left;
   padding: 12px;
-  background: #f1f5f9;
+  font-size: 14px;
   color: #475569;
 }
 
@@ -35,42 +94,44 @@
   border-bottom: 1px solid #e2e8f0;
 }
 
-/* Hover */
 .payroll-table tbody tr:hover {
   background: #f8fafc;
+  transition: 0.2s;
 }
 
-/* Salary text */
+/* Salary */
 .salary {
   font-weight: bold;
   color: #16a34a;
 }
 
-/* Download button */
-.download-btn {
-  background: #4f46e5;
-  color: #fff;
+/* ========================= */
+/* 🔘 BUTTONS */
+/* ========================= */
+.download-btn,
+.view-btn {
   border: none;
-  padding: 6px 12px;
+  padding: 6px 10px;
+  margin-right: 5px;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.3s;
+  font-size: 13px;
+}
+
+.download-btn {
+  background: #3b82f6;
+  color: #fff;
 }
 
 .download-btn:hover {
-  background: #4338ca;
+  background: #2563eb;
 }
 
 .view-btn {
-  background: #365030;
+  background: #10b981;
   color: #fff;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
 }
 
 .view-btn:hover {
-  background: #071806;
+  background: #059669;
 }

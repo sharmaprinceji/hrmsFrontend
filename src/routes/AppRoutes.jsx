@@ -14,6 +14,8 @@ import ProtectedRoute from "../components/common/ProtectedRoute";
 import EmployeeEdit from "../pages/employees/EmployeeEdit";
 import Register from "../pages/auth/Register";
 import Department from "../pages/department/Department";
+import UserList from "../pages/users/UserList";
+import UserEdit from "../pages/users/UserEdit";
 
 const AppRoutes = () => {
     return (
@@ -42,7 +44,23 @@ const AppRoutes = () => {
                         </ProtectedRoute>
                     }
                 />
+                <Route
+                    path="/users"
+                    element={
+                        <ProtectedRoute module="employee" action="view">
+                            <UserList />
+                        </ProtectedRoute>
+                    }
+                />
 
+                <Route
+                    path="/users/edit/:id"
+                    element={
+                        <ProtectedRoute module="employee" action="update">
+                            <UserEdit />
+                        </ProtectedRoute>
+                    }
+                />
                 <Route
                     path="/register"
                     element={

@@ -1,25 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import Sidebar from "../../components/common/Sidebar";
-import "../../styles/department.css";
+import { AuthContext } from "../../context/AuthContext";
+import { hasPermission } from "../../utils/rbac";
+import "../../styles/departments.css";
 
 const Department = () => {
   const [departments, setDepartments] = useState([]);
   const [form, setForm] = useState({ name: "", description: "" });
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState("");
+  const [showForm, setShowForm] = useState(false);
+
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     fetchDepartments();
-    setRole(localStorage.getItem("role")); // ✅ role from login
   }, []);
 
   const fetchDepartments = async () => {
     try {
       const res = await api.get("/departments");
       setDepartments(res.data.data || []);
-    } catch (err) {
+    } catch {
       alert("Failed to load departments");
     }
   };
@@ -43,8 +46,10 @@ const Department = () => {
 
       setForm({ name: "", description: "" });
       setEditingId(null);
+      setShowForm(false);
+
       fetchDepartments();
-    } catch (err) {
+    } catch {
       alert("Operation failed");
     } finally {
       setLoading(false);
@@ -53,10 +58,11 @@ const Department = () => {
 
   const handleEdit = (dept) => {
     setForm({
-      name: dept.name || "",
-      description: dept.description || "",
+      name: dept.name,
+      description: dept.description
     });
     setEditingId(dept.id);
+    setShowForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -65,7 +71,7 @@ const Department = () => {
     try {
       await api.delete(`/departments/${id}`);
       setDepartments((prev) => prev.filter((d) => d.id !== id));
-    } catch (err) {
+    } catch {
       alert("Delete failed");
     }
   };
@@ -75,10 +81,27 @@ const Department = () => {
       <Sidebar />
 
       <div className="department-main">
-        <h2>🏢 Department Management</h2>
 
-        {/* ✅ Only Admin / HR can create */}
-        {["admin", "hr"].includes(role) && (
+        {/* 🔥 HEADER */}
+        <div className="dept-header">
+          <h2>🏢 Department Management</h2>
+
+          {hasPermission(user, "department", "create") && (
+            <button
+              className="add-btn"
+              onClick={() => {
+                setShowForm(!showForm);
+                setEditingId(null);
+                setForm({ name: "", description: "" });
+              }}
+            >
+              ➕ New Department
+            </button>
+          )}
+        </div>
+
+        {/* ✅ FORM */}
+        {showForm && (
           <form className="department-form" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -102,18 +125,13 @@ const Department = () => {
               {editingId ? "Update" : "Create"}
             </button>
 
-            {editingId && (
-              <button
-                type="button"
-                className="cancel-btn"
-                onClick={() => {
-                  setForm({ name: "", description: "" });
-                  setEditingId(null);
-                }}
-              >
-                Cancel
-              </button>
-            )}
+            <button
+              type="button"
+              className="cancel-btn"
+              onClick={() => setShowForm(false)}
+            >
+              Cancel
+            </button>
           </form>
         )}
 
@@ -125,8 +143,9 @@ const Department = () => {
                 <th>Name</th>
                 <th>Description</th>
 
-                {/* Only admin/hr */}
-                {["admin", "hr"].includes(role) && <th>Actions</th>}
+                {hasPermission(user, "department", "update") && (
+                  <th>Actions</th>
+                )}
               </tr>
             </thead>
 
@@ -141,7 +160,7 @@ const Department = () => {
                     <td>{d.name}</td>
                     <td>{d.description}</td>
 
-                    {["admin", "hr"].includes(role) && (
+                    {hasPermission(user, "department", "update") && (
                       <td>
                         <button
                           className="edit-btn"
@@ -150,12 +169,14 @@ const Department = () => {
                           ✏ Edit
                         </button>
 
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDelete(d.id)}
-                        >
-                          🗑 Delete
-                        </button>
+                        {hasPermission(user, "department", "delete") && (
+                          <button
+                            className="delete-btn"
+                            onClick={() => handleDelete(d.id)}
+                          >
+                            🗑 Delete
+                          </button>
+                        )}
                       </td>
                     )}
                   </tr>
@@ -164,6 +185,7 @@ const Department = () => {
             </tbody>
           </table>
         </div>
+
       </div>
     </div>
   );

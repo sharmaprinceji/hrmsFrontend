@@ -1,0 +1,83 @@
+/* reuse employee styles */
+
+.employee-container {
+  display: flex;
+}
+
+.employee-main {
+  padding: 20px;
+  width: 100%;
+}
+
+.employee-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.form-input:disabled {
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th {
+  background: #f1f5f9;
+  padding: 12px;
+}
+
+.employee-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.employee-table tr:hover {
+  background: #f9fafb;
+}
+
+/* Header */
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* Filters */
+.user-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.user-filters input,
+.user-filters select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* Pagination */
+.pagination {
+  margin-top: 15px;
+}
+
+.pagination button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #3b82f6;
+  color: white;
+}
