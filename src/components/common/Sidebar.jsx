@@ -55,12 +55,6 @@ const Sidebar = () => {
                         </NavLink>
                     )}
 
-                    {/* {hasPermission(user, "employee", "create") && (
-                        <NavLink to="/employees/create" className="sidebar-link">
-                            ➕ Add Employee
-                        </NavLink>
-                    )} */}
-
                     {hasPermission(user, "department", "view") && (
                         <NavLink
                             to="/departments"
@@ -71,10 +65,17 @@ const Sidebar = () => {
                             🏢 Departments
                         </NavLink>
                     )}
+                    
 
                     {hasPermission(user, "leave", "view") && (
                         <NavLink to="/leave" className="sidebar-link">
                             🏖️ Leave
+                        </NavLink>
+                    )}
+
+                    {hasPermission(user, "leave", "view") && (
+                        <NavLink to="/leave/balance" className="sidebar-link">
+                            🏖️ LeaveBalance
                         </NavLink>
                     )}
 

@@ -16,6 +16,7 @@ import Register from "../pages/auth/Register";
 import Department from "../pages/department/Department";
 import UserList from "../pages/users/UserList";
 import UserEdit from "../pages/users/UserEdit";
+import LeaveBalance from "../pages/levae/LeaveBalance";
 
 const AppRoutes = () => {
     return (
@@ -94,6 +95,15 @@ const AppRoutes = () => {
                     element={
                         <ProtectedRoute module="leave" action="view">
                             <LeaveList />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/leave/balance"
+                    element={
+                        <ProtectedRoute module="leave" action="view">
+                            <LeaveBalance />
                         </ProtectedRoute>
                     }
                 />

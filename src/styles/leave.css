@@ -65,3 +65,44 @@
 .leave-btn {
   margin-right: 5px;
 }
+
+
+/* layout */
+.leave-container {
+  display: flex;
+}
+
+.leave-main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* grid layout */
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* card styling */
+.balance-card {
+  padding: 15px;
+  border-radius: 12px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.balance-card:hover {
+  transform: translateY(-5px);
+}
+
+/* remaining styles */
+.remaining {
+  font-weight: bold;
+  color: green;
+}
+
+.remaining.low {
+  color: red;
+}
