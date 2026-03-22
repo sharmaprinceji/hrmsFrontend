@@ -7,13 +7,13 @@ const LeaveBalance = () => {
   const [balances, setBalances] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("user"));
-  const role = user?.role;
+  const role = user?.roleId;
 
   const fetchBalance = async () => {
     try {
       let endpoint = "/leaves/all";
 
-      if (role === "employee") {
+      if (role === 5) {
         endpoint = "/leaves/my";
       }
 
