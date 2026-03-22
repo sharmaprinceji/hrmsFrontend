@@ -110,7 +110,7 @@ const UserList = () => {
                 <div className="user-filters">
                     <input
                         type="text"
-                        placeholder="Search by name/email/id"
+                        placeholder="Search Here..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />

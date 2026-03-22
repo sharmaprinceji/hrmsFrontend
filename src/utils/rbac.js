@@ -6,7 +6,6 @@ export const ROLES = {
   EMPLOYEE: 5,
 };
 
-// ✅ MAIN FUNCTION (match backend)
 export const hasPermission = (user, module, action) => {
   // console.log("CHECK:", module, action, user?.permissions);
 

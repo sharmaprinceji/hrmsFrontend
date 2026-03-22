@@ -46,7 +46,6 @@ const Login = () => {
     }
   };
 
-  // ✅ ENTER KEY SUPPORT
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSubmit();
@@ -86,7 +85,6 @@ const Login = () => {
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        {/* 🔥 FORGOT PASSWORD */}
         <p
           className="forgot-link"
           onClick={() => navigate("/forgot-password")}

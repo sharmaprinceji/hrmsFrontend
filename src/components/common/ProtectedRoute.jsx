@@ -1,23 +1,31 @@
-import { Navigate } from "react-router-dom";
 import { useContext } from "react";
+import { Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { hasPermission } from "../../utils/rbac";
+import Loader from "./Loader"; // optional (if you have)
 
 const ProtectedRoute = ({ children, module, action }) => {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
 
-  // Not logged in
-  if (!user) return <Navigate to="/" />;
+  // ✅ Get token
+  const token = localStorage.getItem("accessToken");
 
-  // Only dashboard allowed without permission
-  if (!module) return children;
-
-  const allowed = hasPermission(user, module, action);
-
-  if (!allowed) {
-    return <h2>403 Unauthorized</h2>;
+  // ✅ Wait for auth loading
+  if (loading) {
+    return <Loader />; // or <div>Loading...</div>
   }
 
+  // ❌ Not logged in OR token missing
+  if (!user || !token) {
+    return <Navigate to="/" replace />;
+  }
+
+  // ❌ Permission check
+  if (module && action && !hasPermission(user, module, action)) {
+    return <div style={{ padding: "20px" }}>🚫 Access Denied</div>;
+  }
+
+  // ✅ Allowed
   return children;
 };
 
