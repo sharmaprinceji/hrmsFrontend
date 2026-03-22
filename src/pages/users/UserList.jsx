@@ -7,26 +7,57 @@ import { AuthContext } from "../../context/AuthContext";
 import { hasPermission } from "../../utils/rbac";
 import "../../styles/user.css";
 
+/* ✅ Debounce Hook */
+const useDebounce = (value, delay) => {
+    const [debounced, setDebounced] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebounced(value);
+        }, delay);
+
+        return () => clearTimeout(handler);
+    }, [value, delay]);
+
+    return debounced;
+};
+
 const UserList = () => {
     const [users, setUsers] = useState([]);
-    const [filteredUsers, setFilteredUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [search, setSearch] = useState("");
     const [roleFilter, setRoleFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
 
-    const usersPerPage = 5;
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
 
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
 
+    const debouncedSearch = useDebounce(search, 500);
+
+    // ✅ Fetch Users
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await api.get("/users");
-            setUsers(res.data.data || []);
-            setFilteredUsers(res.data.data || []);
+
+            const res = await api.get("/users", {
+                params: {
+                    search: debouncedSearch,
+                    role: roleFilter,
+                    page: currentPage,
+                    limit: 10
+                }
+            });
+
+            const responseData = res.data.data;
+
+            setUsers(responseData.data || []);
+            setTotalPages(responseData.totalPages || 1);
+            setTotalUsers(responseData.total || 0);
+
         } catch (err) {
             alert("Failed to load users");
         } finally {
@@ -34,43 +65,22 @@ const UserList = () => {
         }
     };
 
-    // 🔍 Search + Filter
-    useEffect(() => {
-        let temp = [...users];
-
-        if (search) {
-            temp = temp.filter(
-                (u) =>
-                    u.name.toLowerCase().includes(search.toLowerCase()) ||
-                    u.email.toLowerCase().includes(search.toLowerCase())
-            );
-        }
-
-        if (roleFilter) {
-            temp = temp.filter((u) => u.role_name === roleFilter);
-        }
-
-        setFilteredUsers(temp);
-        setCurrentPage(1);
-    }, [search, roleFilter, users]);
-
+    // ✅ Trigger API
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [debouncedSearch, roleFilter, currentPage]);
 
-    // 🔢 Pagination
-    const indexOfLast = currentPage * usersPerPage;
-    const indexOfFirst = indexOfLast - usersPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirst, indexOfLast);
-
-    const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+    // ✅ Reset page when filter changes
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [debouncedSearch, roleFilter]);
 
     const handleDelete = async (id) => {
         if (!window.confirm("Delete user?")) return;
 
         try {
             await api.delete(`/users/${id}`);
-            setUsers((prev) => prev.filter((u) => u.id !== id));
+            fetchUsers();
         } catch {
             alert("Delete failed");
         }
@@ -82,7 +92,7 @@ const UserList = () => {
 
             <div className="employee-main">
 
-                {/* 🔥 Top Bar */}
+                {/* Header */}
                 <div className="user-header">
                     <h2>Users</h2>
 
@@ -96,11 +106,11 @@ const UserList = () => {
                     )}
                 </div>
 
-                {/* 🔍 Search + Filter */}
+                {/* Filters */}
                 <div className="user-filters">
                     <input
                         type="text"
-                        placeholder="Search by name/email"
+                        placeholder="Search by name/email/id"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -110,11 +120,19 @@ const UserList = () => {
                         onChange={(e) => setRoleFilter(e.target.value)}
                     >
                         <option value="">All Roles</option>
-                        <option value="admin">Admin</option>
-                        <option value="hr">HR</option>
-                        <option value="employee">Employee</option>
+                        <option value="Admin">Admin</option>
+                        <option value="HR Admin">HR</option>
+                        <option value="Employee">Employee</option>
                     </select>
                 </div>
+
+                {/* Info */}
+                {!loading && (
+                    <p style={{ marginBottom: "10px" }}>
+                        Showing {(currentPage - 1) * 10 + 1} to{" "}
+                        {Math.min(currentPage * 10, totalUsers)} of {totalUsers} users
+                    </p>
+                )}
 
                 {/* Table */}
                 {loading ? (
@@ -133,43 +151,61 @@ const UserList = () => {
                             </thead>
 
                             <tbody>
-                                {currentUsers.map((u) => (
-                                    <tr key={u.id}>
-                                        <td>{u.id}</td>
-                                        <td>{u.name}</td>
-                                        <td>{u.email}</td>
-                                        <td>{u.role_name}</td>
+                                {users.length > 0 ? (
+                                    users.map((u) => (
+                                        <tr key={u.id}>
+                                            <td>{u.id}</td>
+                                            <td>{u.name}</td>
+                                            <td>{u.email}</td>
+                                            <td>{u.role_name}</td>
 
-                                        <td>
-                                            {hasPermission(user, "employee", "update") && (
-                                                <button
-                                                    className="action-btn edit-btn"
-                                                    onClick={() =>
-                                                        navigate(`/users/edit/${u.id}`, {
-                                                            state: { userData: u }
-                                                        })
-                                                    }
-                                                >
-                                                    ✏
-                                                </button>
-                                            )}
+                                            <td>
+                                                {hasPermission(user, "employee", "update") && (
+                                                    <button
+                                                        className="action-btn edit-btn"
+                                                        onClick={() =>
+                                                            navigate(`/users/edit/${u.id}`, {
+                                                                state: { userData: u }
+                                                            })
+                                                        }
+                                                    >
+                                                        ✏
+                                                    </button>
+                                                )}
 
-                                            {hasPermission(user, "employee", "delete") && (
-                                                <button
-                                                    className="action-btn delete-btn"
-                                                    onClick={() => handleDelete(u.id)}
-                                                >
-                                                    🗑
-                                                </button>
-                                            )}
+                                                {hasPermission(user, "employee", "delete") && (
+                                                    <button
+                                                        className="action-btn delete-btn"
+                                                        onClick={() => handleDelete(u.id)}
+                                                    >
+                                                        🗑
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" style={{ textAlign: "center" }}>
+                                            No users found
                                         </td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
 
-                        {/* 🔢 Pagination */}
+                        {/* Pagination */}
                         <div className="pagination">
+
+                            {/* Prev */}
+                            <button
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage((prev) => prev - 1)}
+                            >
+                                ⬅ Prev
+                            </button>
+
+                            {/* Numbers */}
                             {Array.from({ length: totalPages }, (_, i) => (
                                 <button
                                     key={i}
@@ -179,6 +215,15 @@ const UserList = () => {
                                     {i + 1}
                                 </button>
                             ))}
+
+                            {/* Next */}
+                            <button
+                                disabled={currentPage === totalPages}
+                                onClick={() => setCurrentPage((prev) => prev + 1)}
+                            >
+                                Next ➡
+                            </button>
+
                         </div>
                     </div>
                 )}

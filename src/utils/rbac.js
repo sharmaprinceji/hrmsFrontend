@@ -8,7 +8,7 @@ export const ROLES = {
 
 // ✅ MAIN FUNCTION (match backend)
 export const hasPermission = (user, module, action) => {
-  console.log("CHECK:", module, action, user?.permissions);
+  // console.log("CHECK:", module, action, user?.permissions);
 
   if (!user || !user.permissions) return false;
 
