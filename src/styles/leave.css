@@ -106,3 +106,51 @@
 .remaining.low {
   color: red;
 }
+
+
+.leave-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+.leave-table th {
+  background: #3b82f6;
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+.leave-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.leave-table tr:hover {
+  background: #f9fafb;
+}
+
+/* Employee Name */
+.emp-name {
+  font-weight: 600;
+}
+
+/* Total column */
+.total {
+  font-weight: bold;
+  color: #111827;
+}
+
+/* Low remaining highlight */
+.low {
+  color: red;
+  font-weight: bold;
+}
+
+/* Header spacing */
+.leave-main h2 {
+  margin-bottom: 15px;
+}

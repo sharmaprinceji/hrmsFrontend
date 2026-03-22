@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import Card from "../../components/ui/Card";
 import Sidebar from "../../components/common/Sidebar";
 import "../../styles/leave.css";
 
@@ -29,6 +28,25 @@ const LeaveBalance = () => {
     fetchBalance();
   }, []);
 
+  // ✅ GROUP DATA
+  const groupedData = {};
+
+  balances.forEach((item) => {
+    if (!groupedData[item.employee_name]) {
+      groupedData[item.employee_name] = {
+        CL: { total: 0, used: 0, remaining: 0 },
+        SL: { total: 0, used: 0, remaining: 0 },
+        EL: { total: 0, used: 0, remaining: 0 },
+      };
+    }
+
+    groupedData[item.employee_name][item.leave_type] = {
+      total: item.total_leaves,
+      used: item.used_leaves,
+      remaining: item.remaining_leaves,
+    };
+  });
+
   return (
     <div className="leave-container">
       <Sidebar />
@@ -36,34 +54,66 @@ const LeaveBalance = () => {
       <div className="leave-main">
         <h2>Leave Balance</h2>
 
-        <div className="balance-grid">
-          {balances.map((b) => (
-            <Card key={b.id} className="balance-card">
+        <table className="leave-table">
+          <thead>
+            <tr>
+              <th>Employee</th>
+              <th>CL (T/U/R)</th>
+              <th>SL (T/U/R)</th>
+              <th>EL (T/U/R)</th>
+              <th>Total Leaves</th>
+              <th>Total Remaining</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {Object.entries(groupedData).map(([name, leaves]) => {
               
-              {/* ✅ Employee Name */}
-              <h4 className="employee-name">{b.employee_name}</h4>
+              const totalLeaves =
+                (leaves.CL.total || 0) +
+                (leaves.SL.total || 0) +
+                (leaves.EL.total || 0);
 
-              {/* Leave Type */}
-              <h3>{b.leave_type}</h3>
+              const totalRemaining =
+                (leaves.CL.remaining || 0) +
+                (leaves.SL.remaining || 0) +
+                (leaves.EL.remaining || 0);
 
-              <p>Total: {b.total_leaves}</p>
-              <p>Used: {b.used_leaves}</p>
+              return (
+                <tr key={name}>
+                  <td className="emp-name">{name}</td>
 
-              <p
-                className={
-                  b.remaining_leaves <= 2
-                    ? "remaining low"
-                    : "remaining"
-                }
-              >
-                Remaining: {b.remaining_leaves}
-              </p>
+                  <td>
+                    {leaves.CL.total} / {leaves.CL.used} /{" "}
+                    <span className={leaves.CL.remaining <= 2 ? "low" : ""}>
+                      {leaves.CL.remaining}
+                    </span>
+                  </td>
 
-            </Card>
-          ))}
-        </div>
+                  <td>
+                    {leaves.SL.total} / {leaves.SL.used} /{" "}
+                    <span className={leaves.SL.remaining <= 2 ? "low" : ""}>
+                      {leaves.SL.remaining}
+                    </span>
+                  </td>
 
-        {balances.length === 0 && <p>No balance found</p>}
+                  <td>
+                    {leaves.EL.total} / {leaves.EL.used} /{" "}
+                    <span className={leaves.EL.remaining <= 2 ? "low" : ""}>
+                      {leaves.EL.remaining}
+                    </span>
+                  </td>
+
+                  <td className="total">{totalLeaves}</td>
+
+                  <td className={totalRemaining <= 5 ? "low total" : "total"}>
+                    {totalRemaining}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );
