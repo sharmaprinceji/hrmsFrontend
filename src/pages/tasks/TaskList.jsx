@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import api from "../../services/api";
 import Sidebar from "../../components/common/Sidebar";
 import { AuthContext } from "../../context/AuthContext";
+import { hasPermission } from "../../utils/rbac";
 import {
   DragDropContext,
   Droppable,
@@ -11,17 +12,79 @@ import "../../styles/task.css";
 
 const TaskList = () => {
   const { user } = useContext(AuthContext);
-  const [tasks, setTasks] = useState([]);
 
+  const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
+
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    assignedTo: "",
+    priority: "low",
+    dueDate: "",
+  });
+
+  // ================= FETCH TASKS =================
   const fetchTasks = async () => {
-    const res = await api.get("/tasks");
-    setTasks(res.data.data || []);
+    try {
+      const res = await api.get("/tasks");
+      const taskData =
+        res.data.data || res.data || [];
+      setTasks(Array.isArray(taskData) ? taskData : []);
+    } catch (err) {
+      console.error(err);
+      setTasks([]);
+    }
+  };
+
+  // ================= FETCH USERS (FIXED) =================
+  const fetchUsers = async () => {
+    try {
+      const res = await api.get("/users");
+
+      const userData =
+        res.data.data.data ||
+        res.data.data ||
+        res.data ||
+        [];
+
+      setUsers(Array.isArray(userData) ? userData : []);
+    } catch (err) {
+      console.error(err);
+      setUsers([]);
+    }
   };
 
   useEffect(() => {
     fetchTasks();
+    fetchUsers();
   }, []);
 
+  // ================= CREATE TASK =================
+  const handleCreateTask = async (e) => {
+    e.preventDefault();
+
+    try {
+      await api.post("/tasks", form);
+
+      alert("✅ Task created successfully");
+
+      setForm({
+        title: "",
+        description: "",
+        assignedTo: "",
+        priority: "low",
+        dueDate: "",
+      });
+
+      fetchTasks();
+    } catch (err) {
+      console.error(err);
+      alert("❌ Failed to create task");
+    }
+  };
+
+  // ================= DRAG =================
   const columns = {
     todo: tasks.filter((t) => t.status === "todo"),
     in_progress: tasks.filter((t) => t.status === "in_progress"),
@@ -39,24 +102,19 @@ const TaskList = () => {
 
     try {
       await api.put(`/tasks/${taskId}`, {
-        title: task.title || "",
-        description: task.description || "",
-        priority: task.priority || "low",
+        ...task,
         status: newStatus,
-        dueDate: task.dueDate || null,
       });
 
-      // ✅ optimistic update
       setTasks((prev) =>
         prev.map((t) =>
           t.id === task.id ? { ...t, status: newStatus } : t
         )
       );
-
     } catch (err) {
       console.error(err);
-      alert("Update failed or not allowed");
-      fetchTasks(); // revert
+      alert("Update failed");
+      fetchTasks();
     }
   };
 
@@ -67,9 +125,71 @@ const TaskList = () => {
       <div className="task-main">
         <h2>Task Board</h2>
 
+        {hasPermission(user, "task", "create") && (
+          <form className="task-form" onSubmit={handleCreateTask}>
+            <input
+              type="text"
+              placeholder="Title"
+              value={form.title}
+              onChange={(e) =>
+                setForm({ ...form, title: e.target.value })
+              }
+              required
+            />
+
+            <input
+              type="text"
+              placeholder="Description"
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+            />
+
+            
+            <select
+              value={form.assignedTo}
+              onChange={(e) =>
+                setForm({ ...form, assignedTo: e.target.value })
+              }
+              required
+            >
+              <option value="">Assign User</option>
+
+              {Array.isArray(users) &&
+                users.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name || u.email}
+                  </option>
+                ))}
+            </select>
+
+            <select
+              value={form.priority}
+              onChange={(e) =>
+                setForm({ ...form, priority: e.target.value })
+              }
+            >
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+
+            <input
+              type="date"
+              value={form.dueDate}
+              onChange={(e) =>
+                setForm({ ...form, dueDate: e.target.value })
+              }
+            />
+
+            <button type="submit">Create Task</button>
+          </form>
+        )}
+
+        {/* ================= BOARD ================= */}
         <DragDropContext onDragEnd={onDragEnd}>
           <div className="task-board">
-
             {Object.entries(columns).map(([status, taskList]) => (
               <Droppable key={status} droppableId={status}>
                 {(provided, snapshot) => (
@@ -101,9 +221,12 @@ const TaskList = () => {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <strong>{task.title}</strong>
-                            <p>{task.description}</p>
-                            <small>Priority: {task.priority}</small>
+                            <strong>Title: {task.title}</strong>
+                            <p>Des: {task.description}</p>
+                            <small>
+                              Prio: {task.priority}
+                            </small><br/>
+                            <small>Emp: {task.assignedTo}</small>
                           </div>
                         )}
                       </Draggable>
@@ -114,7 +237,6 @@ const TaskList = () => {
                 )}
               </Droppable>
             ))}
-
           </div>
         </DragDropContext>
       </div>

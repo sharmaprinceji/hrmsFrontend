@@ -6,6 +6,7 @@ import "../../styles/leave.css";
 
 const LeaveList = () => {
   const [leaves, setLeaves] = useState([]);
+  const [message,setMessage]=useState("");
 
   const fetchLeaves = async () => {
     try {
@@ -18,11 +19,12 @@ const LeaveList = () => {
 
   const approveLeave = async (id) => {
     try {
-      const res = await api.put(`/leaves/${id}/approve`);
-      alert(res.data.message || "Leave Approved"); // ✅ backend message
+      let res = await api.put(`/leaves/${id}/approve`);
+      setMessage(res.message);
+      alert(message || "Leave Approved"); 
       fetchLeaves();
     } catch (err) {
-      alert("Approve failed");
+      alert(message || "Yor are not allowed to approve !");
     }
   };
 
@@ -32,7 +34,7 @@ const LeaveList = () => {
       alert(res.data.message || "Leave Rejected"); // ✅ backend message
       fetchLeaves();
     } catch (err) {
-      alert("Reject failed");
+       alert(message || "Yor are not allowed to reject !");
     }
   };
 
