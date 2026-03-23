@@ -98,7 +98,7 @@ const LeaveList = () => {
                           text="Reject"
                           type="secondary"
                           onClick={() => rejectLeave(l.id)}
-                        />
+                         />
                       </>
                     )}
                   </td>
