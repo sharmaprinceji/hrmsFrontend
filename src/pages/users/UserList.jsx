@@ -187,18 +187,19 @@ const UserList = () => {
                                             <td>{u.role_name}</td>
 
                                             <td>
-                                                {hasPermission(user, "employee", "update") && (
-                                                    <button
-                                                        className="action-btn edit-btn"
-                                                        onClick={() =>
-                                                            navigate(`/users/edit/${u.id}`, {
-                                                                state: { userData: u }
-                                                            })
-                                                        }
-                                                    >
-                                                        ✏
-                                                    </button>
-                                                )}
+                                                {hasPermission(user, "employee", "update") &&
+                                                    user?.roleId !== 5 && (
+                                                        <button
+                                                            className="action-btn edit-btn"
+                                                            onClick={() =>
+                                                                navigate(`/users/edit/${u.id}`, {
+                                                                    state: { userData: u }
+                                                                })
+                                                            }
+                                                        >
+                                                            ✏
+                                                        </button>
+                                                    )}
 
                                                 {hasPermission(user, "employee", "delete") && (
                                                     <button

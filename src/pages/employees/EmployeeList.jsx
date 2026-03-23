@@ -105,14 +105,15 @@ const EmployeeList = () => {
 
                     <td>
                       {/* Edit */}
-                      {hasPermission(user, "employee", "update") && (
-                        <button
-                          className="action-btn edit-btn"
-                          onClick={() => handleEdit(e.id)}
-                        >
-                          ✏️
-                        </button>
-                      )}
+                      {hasPermission(user, "employee", "update") &&
+                        user?.roleId !== 5 && (
+                          <button
+                            className="action-btn edit-btn"
+                            onClick={() => handleEdit(e.id)}
+                          >
+                            ✏️
+                          </button>
+                        )}
 
                       {/* Delete */}
                       {hasPermission(user, "employee", "delete") && (
