@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import {useNavigate} from "react-router-dom";
 import api from "../../services/api";
 import Sidebar from "../../components/common/Sidebar";
 import Button from "../../components/ui/Button";
@@ -6,6 +7,7 @@ import "../../styles/employeeForm.css";
 
 const EmployeeCreate = () => {
   const [departments, setDepartments] = useState([]); // 🔥 NEW
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     userId: "",
@@ -40,6 +42,7 @@ const EmployeeCreate = () => {
     try {
       await api.post("/employees", form);
       alert("Employee Created");
+      navigate("/employees");
     } catch (err) {
       alert("Error creating employee");
     }

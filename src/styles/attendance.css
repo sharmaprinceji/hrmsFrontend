@@ -8,99 +8,22 @@
   background: #f1f5f9;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .attendance-card {
   background: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  width: 350px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  padding: 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .attendance-card h2 {
   margin-bottom: 15px;
 }
 
-/* Status */
-.status {
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.status.not_checked_in {
-  color: #ef4444;
-}
-
-.status.checked_in {
-  color: #3b82f6;
-}
-
-.status.checked_out {
-  color: #16a34a;
-}
-
-/* Buttons */
-.btn-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: 0.2s;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Check-in */
-.checkin {
-  background: #3b82f6;
-  color: white;
-}
-
-.checkin:hover {
-  background: #2563eb;
-}
-
-/* Check-out */
-.checkout {
-  background: #16a34a;
-  color: white;
-}
-
-.checkout:hover {
-  background: #15803d;
-}
-
-.present {
-  background: #16a34a;
-  color: #fff;
-}
-
-.absent {
-  background: #dc2626;
-  color: #fff;
-}
-
-.form-input {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
+/* FILTER */
 .filter-bar {
   display: flex;
   gap: 10px;
@@ -114,10 +37,69 @@
   border: 1px solid #ccc;
 }
 
-.form-input {
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+/* TABLE */
+.attendance-table table {
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.attendance-table th {
+  background: #f3f4f6;
+}
+
+/* STATUS COLORS */
+.status.present {
+  color: green;
+  font-weight: bold;
+}
+
+.status.absent {
+  color: red;
+  font-weight: bold;
+}
+
+/* BUTTONS */
+.btn-group {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.checkin {
+  background: #3b82f6;
+  color: white;
+}
+
+.checkout {
+  background: #16a34a;
+  color: white;
+}
+
+.present {
+  background: #16a34a;
+  color: #fff;
+}
+
+.absent {
+  background: #dc2626;
+  color: #fff;
 }
