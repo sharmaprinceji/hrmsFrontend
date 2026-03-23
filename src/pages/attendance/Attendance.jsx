@@ -176,8 +176,9 @@ const Attendance = () => {
               <table>
                 <thead>
                   <tr>
-                    {isHRorManager && <th>Name</th>}
-                    {isHRorManager && <th>Code</th>}
+                    <th>Employee ID</th>
+                    <th>Name</th>
+                    <th>Code</th>
                     <th>Date</th>
                     <th>Status</th>
                     <th>Check In</th>
@@ -188,30 +189,26 @@ const Attendance = () => {
 
                 <tbody>
                   {report.map((r, i) => {
-                    const isToday =
-                      r.attendance_date === today;
-
+                    const isToday = r.attendance_date === today;
                     const isMarked =
                       r.status !== null && r.status !== undefined;
 
                     return (
                       <tr key={i}>
-                        {isHRorManager && <td>{r.name}</td>}
-                        {isHRorManager && (
-                          <td>{r.employee_code}</td>
-                        )}
+                        <td>{r.employee_id}</td>
+                        <td>{r.name}</td>
+                        <td>{r.employee_code}</td>
 
                         <td>{formatDate(r.attendance_date)}</td>
 
-                        {/* STATUS */}
                         <td
                           style={{
                             color:
                               r.status === "present"
                                 ? "#16a34a"
                                 : r.status === "absent"
-                                ? "#dc2626"
-                                : "#6b7280",
+                                  ? "#dc2626"
+                                  : "#6b7280",
                             fontWeight: 600,
                           }}
                         >
@@ -221,7 +218,6 @@ const Attendance = () => {
                         <td>{formatTime(r.check_in)}</td>
                         <td>{formatTime(r.check_out)}</td>
 
-                        {/* HR ACTION */}
                         {isHRorManager && (
                           <td>
                             {isToday && !isMarked && (
@@ -229,10 +225,7 @@ const Attendance = () => {
                                 <button
                                   className="btn present"
                                   onClick={() =>
-                                    markAttendance(
-                                      r.employee_id,
-                                      "present"
-                                    )
+                                    markAttendance(r.employee_id, "present")
                                   }
                                 >
                                   P
@@ -241,10 +234,7 @@ const Attendance = () => {
                                 <button
                                   className="btn absent"
                                   onClick={() =>
-                                    markAttendance(
-                                      r.employee_id,
-                                      "absent"
-                                    )
+                                    markAttendance(r.employee_id, "absent")
                                   }
                                 >
                                   A
