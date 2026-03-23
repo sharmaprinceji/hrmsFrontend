@@ -20,6 +20,7 @@ import LeaveBalance from "../pages/levae/LeaveBalance";
 import AddPayroll from "../pages/payroll/AddPayroll";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+import RolePage from "../pages/role/RolePage";
 
 const AppRoutes = () => {
     return (
@@ -37,6 +38,15 @@ const AppRoutes = () => {
                     element={
                         <ProtectedRoute>
                             <Dashboard />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/roles"
+                    element={
+                        <ProtectedRoute module="role" action="create">
+                            <RolePage />
                         </ProtectedRoute>
                     }
                 />

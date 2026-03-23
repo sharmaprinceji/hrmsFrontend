@@ -37,21 +37,9 @@ const Sidebar = () => {
                         🏠 Dashboard
                     </NavLink>
 
-                    {hasPermission(user, "employee", "view") && (
-                        <NavLink to="/users" className="sidebar-link">
-                            👥 Users
-                        </NavLink>
-                    )}
-
-                    {/* {hasPermission(user, "employee", "create") && (
-                        <NavLink to="/register" className="sidebar-link">
-                            👤 Register User
-                        </NavLink>
-                    )} */}
-
-                    {hasPermission(user, "employee", "view") && (
-                        <NavLink to="/employees" className="sidebar-link">
-                            👨‍💼 Employees
+                    {hasPermission(user, "role", "create") && (
+                        <NavLink to="/roles" className="sidebar-link">
+                            🛡️ Roles
                         </NavLink>
                     )}
 
@@ -66,6 +54,18 @@ const Sidebar = () => {
                         </NavLink>
                     )}
 
+
+                    {hasPermission(user, "employee", "view") && (
+                        <NavLink to="/users" className="sidebar-link">
+                            👥 Users
+                        </NavLink>
+                    )}
+
+                    {hasPermission(user, "employee", "view") && (
+                        <NavLink to="/employees" className="sidebar-link">
+                            👨‍💼 Employees
+                        </NavLink>
+                    )}
 
                     {hasPermission(user, "leave", "view") && (
                         <NavLink to="/leave" className="sidebar-link">
@@ -112,7 +112,8 @@ const Sidebar = () => {
             </div>
 
             {/* BOTTOM */}
-            <button className="sidebar-logout" onClick={handleLogout}>
+            <button className="sidebar-logout" onClick={handleLogout} style={{marginTop:"15px"
+            }}>
                 🚪 Logout
             </button>
 

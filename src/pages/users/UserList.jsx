@@ -24,6 +24,7 @@ const useDebounce = (value, delay) => {
 
 const UserList = () => {
     const [users, setUsers] = useState([]);
+    const [roles, setRoles] = useState([]); // 🔥 dynamic roles
     const [loading, setLoading] = useState(true);
 
     const [search, setSearch] = useState("");
@@ -38,7 +39,21 @@ const UserList = () => {
 
     const debouncedSearch = useDebounce(search, 500);
 
-    // ✅ Fetch Users
+    // =========================
+    // FETCH ROLES (🔥 NEW)
+    // =========================
+    const fetchRoles = async () => {
+        try {
+            const res = await api.get("/roles");
+            setRoles(res.data.data || []);
+        } catch (err) {
+            console.error("Failed to load roles");
+        }
+    };
+
+    // =========================
+    // FETCH USERS
+    // =========================
     const fetchUsers = async () => {
         try {
             setLoading(true);
@@ -46,7 +61,7 @@ const UserList = () => {
             const res = await api.get("/users", {
                 params: {
                     search: debouncedSearch,
-                    role: roleFilter,
+                    role: roleFilter, // 🔥 dynamic role name
                     page: currentPage,
                     limit: 10
                 }
@@ -65,16 +80,24 @@ const UserList = () => {
         }
     };
 
-    // ✅ Trigger API
+    // =========================
+    // LOAD DATA
+    // =========================
+    useEffect(() => {
+        fetchRoles();   // 🔥 load roles
+    }, []);
+
     useEffect(() => {
         fetchUsers();
     }, [debouncedSearch, roleFilter, currentPage]);
 
-    // ✅ Reset page when filter changes
     useEffect(() => {
         setCurrentPage(1);
     }, [debouncedSearch, roleFilter]);
 
+    // =========================
+    // DELETE USER
+    // =========================
     const handleDelete = async (id) => {
         if (!window.confirm("Delete user?")) return;
 
@@ -92,7 +115,7 @@ const UserList = () => {
 
             <div className="employee-main">
 
-                {/* Header */}
+                {/* HEADER */}
                 <div className="user-header">
                     <h2>Users</h2>
 
@@ -106,7 +129,7 @@ const UserList = () => {
                     )}
                 </div>
 
-                {/* Filters */}
+                {/* FILTERS */}
                 <div className="user-filters">
                     <input
                         type="text"
@@ -115,18 +138,22 @@ const UserList = () => {
                         onChange={(e) => setSearch(e.target.value)}
                     />
 
+                    {/* 🔥 UPDATED DROPDOWN */}
                     <select
                         value={roleFilter}
                         onChange={(e) => setRoleFilter(e.target.value)}
                     >
                         <option value="">All Roles</option>
-                        <option value="Admin">Admin</option>
-                        <option value="HR Admin">HR</option>
-                        <option value="Employee">Employee</option>
+
+                        {roles.map((r) => (
+                            <option key={r.id} value={r.name}>
+                                {r.name}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
-                {/* Info */}
+                {/* INFO */}
                 {!loading && (
                     <p style={{ marginBottom: "10px" }}>
                         Showing {(currentPage - 1) * 10 + 1} to{" "}
@@ -134,7 +161,7 @@ const UserList = () => {
                     </p>
                 )}
 
-                {/* Table */}
+                {/* TABLE */}
                 {loading ? (
                     <Loader />
                 ) : (
@@ -194,10 +221,9 @@ const UserList = () => {
                             </tbody>
                         </table>
 
-                        {/* Pagination */}
+                        {/* PAGINATION */}
                         <div className="pagination">
 
-                            {/* Prev */}
                             <button
                                 disabled={currentPage === 1}
                                 onClick={() => setCurrentPage((prev) => prev - 1)}
@@ -205,7 +231,6 @@ const UserList = () => {
                                 ⬅ Prev
                             </button>
 
-                            {/* Numbers */}
                             {Array.from({ length: totalPages }, (_, i) => (
                                 <button
                                     key={i}
@@ -216,7 +241,6 @@ const UserList = () => {
                                 </button>
                             ))}
 
-                            {/* Next */}
                             <button
                                 disabled={currentPage === totalPages}
                                 onClick={() => setCurrentPage((prev) => prev + 1)}

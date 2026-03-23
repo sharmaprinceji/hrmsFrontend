@@ -1,0 +1,91 @@
+.role-container {
+  display: flex;
+}
+
+.role-main {
+  flex: 1;
+  padding: 20px;
+  background: #f5f6fa;
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.create-btn {
+  background: #2f80ed;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.create-btn:hover {
+  background: #1c6dd0;
+}
+
+.role-card {
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.role-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.permission-box {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.permission-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.role-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.role-table th,
+.role-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.role-table th {
+  background: #2f3640;
+  color: white;
+}
