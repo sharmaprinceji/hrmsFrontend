@@ -21,6 +21,7 @@ import AddPayroll from "../pages/payroll/AddPayroll";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
 import RolePage from "../pages/role/RolePage";
+import Profile from "../pages/profile/Profile";
 
 const AppRoutes = () => {
     return (
@@ -31,6 +32,7 @@ const AppRoutes = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/profile" element={<Profile />} />
 
                 {/* Dashboard (everyone logged-in only) */}
                 <Route
