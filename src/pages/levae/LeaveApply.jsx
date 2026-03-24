@@ -14,11 +14,13 @@ const LeaveApply = () => {
 
   const applyLeave = async () => {
     try {
-      const res = await api.post("/leaves/apply", form); // ✅ FIX endpoint
+      const res = await api.post("/leaves/apply", {
+        ...form,
+        leaveTypeId: Number(form.leaveTypeId) // ✅ ensure number
+      });
 
       alert(res.data.message || "Leave Applied");
 
-      // reset form
       setForm({
         leaveTypeId: "",
         startDate: "",
@@ -40,12 +42,19 @@ const LeaveApply = () => {
 
           <div className="leave-form-title">Apply Leave</div>
 
-          <input
+          {/* ✅ DROPDOWN */}
+          <select
             className="leave-form-input"
-            placeholder="Leave Type ID (e.g. 1 = CL)"
             value={form.leaveTypeId}
-            onChange={(e)=>setForm({...form,leaveTypeId:e.target.value})}
-          />
+            onChange={(e) =>
+              setForm({ ...form, leaveTypeId: e.target.value })
+            }
+          >
+            <option value="">Select Leave Type</option>
+            <option value="1">CL (Casual Leave)</option>
+            <option value="2">SL (Sick Leave)</option>
+            <option value="3">EL (Earned Leave)</option>
+          </select>
 
           <input
             className="leave-form-input"

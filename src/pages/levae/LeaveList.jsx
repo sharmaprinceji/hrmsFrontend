@@ -100,6 +100,7 @@ const LeaveList = () => {
                           onClick={() => rejectLeave(l.id)}
                          />
                       </>
+                      
                     )}
                   </td>
                 </tr>
